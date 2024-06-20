@@ -3,10 +3,38 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
+    // Eliminar todas las variables de sesión
+    $_SESSION = array();
+    session_destroy();
+    
+    header("Location: ./index.php");
+    exit();
+}
+if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
+    $email = $_SESSION['email'];
+    $rol = $_SESSION['rol'];
+    
+    if ($rol === 'empleado') {
+        ?>
+        <div>
+        <form method="POST" action="">
+            <button type="submit" name="logout">Cerrar sesión</button>
+        </form>
+    </div>
+    <?php
 
-// Verificar si la sesión está iniciada y la variable de sesión 'email' está establecida
-$email = isset($_SESSION['email']) ? $_SESSION['email'] : 'Usuario no identificado';
+    } else {
+
+        header("Location: ./index.php");
+        exit();
+    }
+} else {
+    header("Location: ./index.php");
+    exit();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,6 +108,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : 'Usuario no identifica
 </head>
 
 <body>
+
     <div class="header-container">
         <h2 id="nombreUser">Nombre del Empleado</h2>
         <h2><?php echo htmlspecialchars($email); ?></h2>
@@ -266,9 +295,6 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : 'Usuario no identifica
             horaSalidaMnnDate.setMinutes(horaSalidaMnnDate.getMinutes() + 10);
             const horaSalidaMas10Minutos = pad(horaSalidaMnnDate.getHours()) + ':' + pad(horaSalidaMnnDate.getMinutes());
 
-
-
-
             // Función para añadir ceros a la izquierda si es necesario
             function pad(number) {
                 if (number < 10) {
@@ -300,7 +326,7 @@ $email = isset($_SESSION['email']) ? $_SESSION['email'] : 'Usuario no identifica
                     document.getElementById('btn_submit').value = "EntradaManana";
 
                     return;
-                } else if (salidaMnnValue === 'N/A' && horaActualHHMM < horaSalidaMas10Minutos && horaActualHHMM >= horaSalidaMnnValue) { /// } else if (salidaTardeValue === 'N/A' &&  horaActualHHMM < horaSalidaTardeMas10Minutos && horaActualHHMM>=horaSalidaTardeValue) {
+                } else if (salidaMnnValue === 'N/A' && horaActualHHMM < horaSalidaMas10Minutos) { /// } else if (salidaTardeValue === 'N/A' &&  horaActualHHMM < horaSalidaTardeMas10Minutos && horaActualHHMM>=horaSalidaTardeValue) {
                     console.log(salidaMnnValue + " " + horaActualHHMM + " " + horaEntradaMnnValue + " " + horaSalidaMas10Minutos + " ");
 
                     document.getElementById('btn_submit').textContent = 'Registrar salida';
