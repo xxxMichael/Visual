@@ -14,9 +14,11 @@ $hora_salida_mnn = $_POST['emp_hora_salida_mnn'];
 $hora_entrada_tarde_mnn = $_POST['emp_hora_entrada_tarde'];
 $hora_salida_tarde = $_POST['emp_hora_salida_tarde'];
 
+$sqlInsertEmpleado = "INSERT INTO empleados (cedula, nombre, apellido, telefono, direccion, hora_entrada_mnn, hora_salida_mnn, hora_entrada_tarde, hora_salida_tarde) VALUES('$cedula', '$nombre', '$apellido', '$telefono', '$direccion', '$hora_entrada_mnn', '$hora_salida_mnn', '$hora_entrada_tarde_mnn', '$hora_salida_tarde')";
 
-$sqlInsert = "INSERT INTO empleados (cedula, nombre, apellido, telefono, direccion, hora_entrada_mnn, hora_salida_mnn, hora_entrada_tarde, hora_salida_tarde) VALUES('$cedula', '$nombre', '$apellido', '$telefono', '$direccion', '$hora_entrada_mnn', '$hora_salida_mnn', '$hora_entrada_tarde_mnn', '$hora_salida_tarde')";
-if ($con->query($sqlInsert) === TRUE) {   // Utiliza el operador de comparación estricta
+$sqlInsertUsuario = "INSERT INTO usuarios (usuario, contrasenia, rol) VALUES('$cedula', '$cedula', 'empleado')";
+
+if ($con->query($sqlInsertEmpleado) === TRUE && $con->query($sqlInsertUsuario) === TRUE) {
     echo json_encode(["success" => true, "message" => "Se guardó correctamente"]);
 } else {
     echo json_encode(["success" => false, "message" => "Fallo al guardar: " . $con->error]);

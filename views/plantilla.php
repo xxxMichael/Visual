@@ -1,3 +1,15 @@
+<?php
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
+    $_SESSION = array();
+    session_destroy();
+
+    header("Location: ./index.php");
+    
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +30,8 @@
     </header>
     <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
         <a class="navbar-brand" href="#">EEASA</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -58,8 +71,13 @@
                         <li><a href="index.php?action=reporteSemanal" class="text-white">Reporte Semanal</a></li>
                         <li><a href="index.php?action=reporteMensual" class="text-white">Reporte Mensual</a></li>
                         <li><a href="index.php?action=reporteGeneral" class="text-white">Reporte General</a></li>
-                        <li><a href="index.php?action=GestionInOut" class="text-white">Registro Asistencia</a></li>
-
+                        <div>
+                            <form method="POST" action="">
+                                <button type="submit" name="logout">Cerrar sesión</button>
+                            </form>
+                        </div>
+                        <!--<li><a href="index.php?action=GestionInOut" class="text-white">Registro Asistencia</a></li>-->
+                        <li class="nav-item"><a class="nav-link" href="views/login.html">Cerrar Sesion</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">

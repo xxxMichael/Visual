@@ -4,25 +4,24 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
-    // Eliminar todas las variables de sesión
     $_SESSION = array();
     session_destroy();
-    
+
     header("Location: ./index.php");
     exit();
 }
 if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
     $email = $_SESSION['email'];
     $rol = $_SESSION['rol'];
-    
+
     if ($rol === 'empleado') {
         ?>
         <div>
-        <form method="POST" action="">
-            <button type="submit" name="logout">Cerrar sesión</button>
-        </form>
-    </div>
-    <?php
+            <form method="POST" action="">
+                <button type="submit" name="logout">Cerrar sesión</button>
+            </form>
+        </div>
+        <?php
 
     } else {
 
@@ -45,16 +44,13 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
 
     <title>Registro Jornada</title>
     <style>
-        body {
-    background-color: #2e302f;
-}
 
         .header-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top:60px;
-        
+            margin-top: 60px;
+
         }
 
         .header-container h2 {
@@ -317,7 +313,6 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
             console.log(horaActualStr < horaSalidaMas10Minutos);
 
 
-            // Verificar si es horario de la mañana (7 am - 1 pm)
             if (horaActual.getHours() >= 6 && horaActual.getHours() <= 13 && horaActualStr < horaSalidaMas10Minutos) { // 14 representa las 2 pm en formato de 24 horas
                 console.log();
                 if (entradaMnnValue === 'N/A' && horaActualStr >= horaMenos15Minutos && horaActualStr < horaSalidaMnnValue) {
@@ -326,7 +321,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                     document.getElementById('btn_submit').value = "EntradaManana";
 
                     return;
-                } else if (salidaMnnValue === 'N/A' && horaActualHHMM < horaSalidaMas10Minutos) { /// } else if (salidaTardeValue === 'N/A' &&  horaActualHHMM < horaSalidaTardeMas10Minutos && horaActualHHMM>=horaSalidaTardeValue) {
+                } else if (entradaMnnValue !=="N/A" && salidaMnnValue === 'N/A' && horaActualHHMM < horaSalidaMas10Minutos) { /// } else if (salidaTardeValue === 'N/A' &&  horaActualHHMM < horaSalidaTardeMas10Minutos && horaActualHHMM>=horaSalidaTardeValue) {
                     console.log(salidaMnnValue + " " + horaActualHHMM + " " + horaEntradaMnnValue + " " + horaSalidaMas10Minutos + " ");
 
                     document.getElementById('btn_submit').textContent = 'Registrar salida';
@@ -346,7 +341,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                     document.getElementById('btn_submit').textContent = 'Registrar entrada';
                     document.getElementById('btn_submit').value = "EntradaTarde";
                     return;
-                } else if (salidaTardeValue === 'N/A' && horaActualHHMM < horaSalidaTardeMas10Minutos && horaActualHHMM >= horaSalidaTardeValue) {  //  si es necesario bloquear el boton de salida hasta que sea la hora         } else if (salidaTardeValue === 'N/A' &&  horaActualHHMM < horaSalidaTardeMas10Minutos && horaActualHHMM>=horaSalidaTardeValue) {
+                } else if (entradaTardeValue !== 'N/A' && salidaTardeValue === 'N/A' && horaActualHHMM < horaSalidaTardeMas10Minutos) {  //  si es necesario bloquear el boton de salida hasta que sea la hora         } else if (salidaTardeValue === 'N/A' &&  horaActualHHMM < horaSalidaTardeMas10Minutos && horaActualHHMM>=horaSalidaTardeValue) {
 
                     console.log(salidaTardeValue + " asxx" + "  as" + horaActualHHMM + "  zz" + horaEntradaTardeValue);
 
@@ -375,37 +370,43 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
         // Función para enviar el registro al servidor
         function enviarRegistro(tipoRegistro, hora, cedulaEmpleado) {
             const urlServidor = 'models/guardar_asistencia.php';
+            return new Promise((resolve, reject) => {
 
-            // Datos a enviar
-            const datos = {
-                tipoRegistro: tipoRegistro,
-                hora: hora,
-                cedulaEmpleado: cedulaEmpleado
-            };
+                // Datos a enviar
+                const datos = {
+                    tipoRegistro: tipoRegistro,
+                    hora: hora,
+                    cedulaEmpleado: cedulaEmpleado
+                };
 
-            // Realizar la solicitud fetch
-            fetch(urlServidor, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(response.message);
-                    }
-                    return response.json();
+                // Realizar la solicitud fetch
+                fetch(urlServidor, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
                 })
-                .then(data => {
-                    console.log('Registro enviado correctamente:', data);
-                    location.reload();
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.message);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        resolve();
 
-                })
-                .catch(error => {
-                    console.error('Error al enviar el registro:', error);
-                    // Manejo de errores
-                });
+                        console.log('Registro enviado correctamente:', data);
+                        //                    location.reload();
+
+
+                    })
+                    .catch(error => {
+                        console.error('Error al enviar el registro:', error);
+                        // Manejo de errores
+                    });
+            });
+
         }
         function obtenerHoraActual() {
             const ahora = new Date();
@@ -416,49 +417,98 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
             const horaActual = `${horas}:${minutos}:${segundos}`;
             return horaActual;
         }
+
+
         // Agregar evento click al botón
         btnSubmit.addEventListener('click', function () {
             const valorBoton = btnSubmit.value;
             const hora = obtenerHoraActual();
             const cedulaEmpleado = '2222222222';
-            const horac = obtenerHoraActual();
+            //  const hora = obtenerHoraActual();
             const horaEntradaMnnValue = document.getElementById('hora_entrada_mnn').dataset.value;
             const entradaMnnValue = document.getElementById('registro_entrada_mnn').dataset.value;
             const salidaMnnValue = document.getElementById('registro_salida_mnn').dataset.value;
             const horaEntradatardeValue = document.getElementById('hora_entrada_tarde').dataset.value;
+            const horasalidatardeValue = document.getElementById('hora_salida_tarde').dataset.value;
             const entradaTardeValue = document.getElementById('registro_entrada_tarde').dataset.value;
-
+            const horaSalidaMnnValue = document.getElementById('hora_salida_mnn').dataset.value;
+            function pad(number) {
+                if (number < 10) {
+                    return '0' + number;
+                }
+                return number.toString();
+            }
+            let horaSalidaMnnDate = new Date('2000-01-01T' + horaSalidaMnnValue); // Utilizamos una fecha ficticia para facilitar la manipulación
+            horaSalidaMnnDate.setMinutes(horaSalidaMnnDate.getMinutes() + 10);
+            const horaSalidaMas10Minutos = pad(horaSalidaMnnDate.getHours()) + ':' + pad(horaSalidaMnnDate.getMinutes());
             switch (valorBoton) {
                 case 'EntradaManana':
-                    if (horac > horaEntradaMnnValue) {
-                        const multa = calcularMulta(horac, horaEntradaMnnValue);
-                        enviarmulta(multa, "Atraso", cedulaEmpleado);
-                    }
-                    enviarRegistro('entradaManana', hora, cedulaEmpleado);
+                    enviarRegistro('entradaManana', hora, cedulaEmpleado)
+                        .then(() => {
+                            if (hora > horaEntradaMnnValue) {
+                                const multa = calcularMulta(hora, horaEntradaMnnValue);
+                                return enviarmulta(multa, "Atraso", cedulaEmpleado);
+
+                            } else {
+                                return Promise.resolve();
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error durante el proceso:", error);
+                        });
                     break;
                 case 'SalidaManana':
-                    if (entradaMnnValue === 'N/A') {
-                        enviarmulta(64, "Inasistencia", cedulaEmpleado);
-                    }
-                    enviarRegistro('salidaManana', hora, cedulaEmpleado);
+                    enviarRegistro('salidaManana', hora, cedulaEmpleado)
+                        .then(() => {
+                            if (hora < horaSalidaTardeValue) {
+                                const multa = calcularMulta(horaSalidaTardeValue, hora);
+                                return enviarmulta(multa, "Salida temprana", cedulaEmpleado);
+                            } else {
+                                return Promise.resolve();
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error durante el proceso:", error);
+                        });
+
+                    //  enviarRegistro('salidaManana', hora, cedulaEmpleado);
                     break;
                 case 'EntradaTarde':
+                    enviarRegistro('entradaTarde', hora, cedulaEmpleado)
+                        .then(() => {
+                            if (salidaMnnValue == "N/A" || entradaMnnValue == "N/A") {
+                                const mult = 8 * 8;
+                                enviarmulta((mult), "Inasistencia", cedulaEmpleado);
 
-                    if (horac > horaEntradatardeValue) {
-                        const multa = calcularMulta(horac, horaEntradatardeValue);
-                        enviarmulta(multa, "Atraso", cedulaEmpleado);
-                    }
-                    if (salidaMnnValue === 'N/A') {
-                        enviarmulta(64, "Inasistencia", cedulaEmpleado);
-                    }
-                    enviarRegistro('entradaTarde', hora, cedulaEmpleado);
+                            } else {
+                                if (hora > horaEntradatardeValue) {
+                                    const multa = calcularMulta(hora, horaEntradatardeValue);
+                                    return enviarmulta(multa, "Atraso", cedulaEmpleado);
+
+                                } else {
+                                    return Promise.resolve();
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error durante el proceso:", error);
+                        });
+                    //      enviarRegistro('salidaTarde', hora, cedulaEmpleado);
                     break;
                 case 'SalidaTarde':
-                    if (entradaTardeValue === 'N/A') {
-                        enviarmulta(64, "Inasistencia", cedulaEmpleado);
-                    }
-                    enviarRegistro('salidaTarde', hora, cedulaEmpleado);
+                    enviarRegistro('salidaTarde', hora, cedulaEmpleado)
+                        .then(() => {
+                            if (salidaMnnValue == "N/A" || entradaMnnValue == "N/A"||entradaTardeValue=="N/A") {
+                                const mult = 8 * 8;
+                                enviarmulta((mult), "Inasistencia", cedulaEmpleado);
+
+                            } 
+                        })
+                        .catch(error => {
+                            console.error("Error durante el proceso:", error);
+                        });
                     break;
+
                 default:
                     console.log('Acción no definida para este botón.', valorBoton);
                     break;
@@ -506,13 +556,14 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                 .then(response => response.json())
                 .then(data => {
                     console.log('Multa enviada correctamente:', data);
+                    window.location.reload();
                 })
                 .catch(error => {
                     console.error('Error al enviar la multa:', error);
                 });
         }
 
-    </script>   
+    </script>
 </body>
 
 </html>
