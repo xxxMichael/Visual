@@ -35,20 +35,36 @@ if (!empty($valor) && !empty($tipomulta) && !empty($cedulaEmpleado)) {
         $rowAsistencia = $resultAsistencia->fetch_assoc();
         $idAsis = $rowAsistencia['id_asis'];
 
-        // Insertar la multa en la tabla multas
-        $queryMulta = "INSERT INTO multas (id_asis_per, tipo_multa, multa) VALUES ('$idAsis', '$tipomulta', '$valor')";
-        if ($conn->query($queryMulta) === true) {
-            echo json_encode(['message' => 'Multa registrada correctamente']);
+        // Verificar si la multa es de tipo "Inasistencia"
+        if ($tipomulta === "Inasistencia") {
+            // Eliminar multas previas de tipo "Inasistencia" para este empleado y fecha
+            $sqlEliminarMulta = "DELETE FROM multas WHERE id_asis_per = '$idAsis'";
+            if ($conn->query($sqlEliminarMulta) === false) {
+                die(json_encode(['error' => 'Error al eliminar multas anteriores de inasistencia: ' . $conn->error]));
+            }
+
+            $queryMulta = "INSERT INTO multas (id_asis_per, tipo_multa, multa) VALUES ('$idAsis', 'Inasistencia', '$valor')";
+            if ($conn->query($queryMulta) === true) {
+                echo json_encode(['message' => 'Multa de inasistencia registrada correctamente']);
+            } else {
+                echo json_encode(['error' => 'Error al registrar la multa de inasistencia: ' . $conn->error]);
+            }
         } else {
-            echo json_encode(['error' => 'Error al registrar la multa: ' . $conn->error]);
+            // Es otro tipo de multa diferente de "Inasistencia", proceder con la inserción
+            $queryMulta = "INSERT INTO multas (id_asis_per, tipo_multa, multa) VALUES ('$idAsis', '$tipomulta', '$valor')";
+            if ($conn->query($queryMulta) === true) {
+                echo json_encode(['message' => 'Multa registrada correctamente']);
+            } else {
+                echo json_encode(['error' => 'Error al registrar la multa: ' . $conn->error]);
+            }
         }
     } else {
         echo json_encode([
-            'error' => 'No se encontró el registro de asistencia',
+            'error' => 'No se encontró el registro de asistencia para hoy',
             'valor' => $valor,
             'tipomulta' => $tipomulta,
             'cedulaEmpleado' => $cedulaEmpleado,
-            'fecha'=>$fechaActual
+            'fecha' => $fechaActual
         ]);
     }
 } else {
