@@ -308,7 +308,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
 
             if (horaActual.getHours() >= 6 && horaActual.getHours() <= 13 && horaActualStr < horaSalidaMas10Minutos) { // 14 representa las 2 pm en formato de 24 horas
                 console.log();
-                if (entradaMnnValue === 'N/A' && horaActualStr >= horaMenos15Minutos && horaActualStr < horaSalidaMnnValue) {
+                if (entradaMnnValue === 'N/A' && horaActualStr >= horaMenos15Minutos && horaActualStr < horaSalidaMas10Minutos) {
                     console.log(entradaMnnValue + " " + horaActualStr + " " + horaMenos15Minutos + " " + horaSalidaMnnValue + " ");
                     document.getElementById('btn_submit').textContent = 'Registrar entrada';
                     document.getElementById('btn_submit').value = "EntradaManana";
@@ -327,8 +327,8 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                     return;
                 }
 
-            } else if (horaActual.getHours() >= 13 && horaActual.getHours() < 21) { // 21 representa las 9 pm en formato de 24 horas
-                if (entradaTardeValue === 'N/A' && horaActualHHMM < horaSalidaTardeValue) {
+            } else if (horaActual.getHours() >= 13 && horaActual.getHours() < 22) { // 21 representa las 9 pm en formato de 24 horas
+                if (entradaTardeValue === 'N/A' && horaActualHHMM < horaSalidaTardeMas10Minutos) {
                     console.log("dentro de reg entrad");
 
                     document.getElementById('btn_submit').textContent = 'Registrar entrada';

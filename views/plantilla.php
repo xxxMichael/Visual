@@ -41,6 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
                 <li class="nav-item"><a class="nav-link" href="index.php?action=reporteSemanal">Reporte Semanal</a></li>
                 <li class="nav-item"><a class="nav-link" href="index.php?action=reporteMensual">Reporte Mensual</a></li>
                 <li class="nav-item"><a class="nav-link" href="index.php?action=reporteGeneral">Reporte General</a></li>
+                <div>
+                            <form method="POST" action="">
+                                <button type="submit" name="logout">Cerrar sesión</button>
+                            </form>
+                        </div>
             </ul>
         </div>
     </nav>
@@ -71,13 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
                         <li><a href="index.php?action=reporteSemanal" class="text-white">Reporte Semanal</a></li>
                         <li><a href="index.php?action=reporteMensual" class="text-white">Reporte Mensual</a></li>
                         <li><a href="index.php?action=reporteGeneral" class="text-white">Reporte General</a></li>
-                        <div>
-                            <form method="POST" action="">
-                                <button type="submit" name="logout">Cerrar sesión</button>
-                            </form>
-                        </div>
+                      
                         <!--<li><a href="index.php?action=GestionInOut" class="text-white">Registro Asistencia</a></li>-->
-                        <li class="nav-item"><a class="nav-link" href="views/login.html">Cerrar Sesion</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
