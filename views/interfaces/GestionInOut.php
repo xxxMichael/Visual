@@ -27,27 +27,58 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/Gestion.css">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title>Registro Jornada</title>
     <style>
-        .header-container {
+        body {
+            background-color: #2e302f;
+        }
+
+        .custom-navbar {
+            background-color: #007bff;
+        }
+
+        .custom-navbar .navbar-brand,
+        .custom-navbar .nav-link {
+            color: #fff !important;
+        }
+
+        .custom-navbar .nav-link:hover {
+            color: #ffc107 !important;
+        }
+
+        .custom-header {
+            background: url('imges/uta-banner.jpg') no-repeat center center;
+            background-size: cover;
+            height: 200px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin-top: 60px;
-
+            justify-content: center;
         }
 
-        .header-container h2 {
-            margin: 0 10px;
-            /* Espacio entre los h2 */
+        .custom-header h1 {
+            color: #fff;
+            text-align: center;
+            padding: 70px 0;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
+        .table-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .custom-footer {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .table-container h2 {
+            color: #000;
         }
 
         th,
@@ -70,71 +101,72 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
             background-color: #fca5a5;
             /* Rojo pastel */
         }
-
-        button {
-            display: block;
-            width: 100px;
-            padding: 10px;
-            margin: 0 auto;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
     </style>
 
 </head>
 
 <body>
+    <header class="custom-header">
+        <h1>Empresa Electrica Ambato</h1>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
+        <div class="container-fluid">
+        
+            <div class="navbar-text ">
+                <h2 class="navbar-brand" id="nombreUser">Nombre del Empleado</h2>
+                <h2 class="navbar-brand"><?php echo htmlspecialchars($email); ?></h2>
+            </div>
 
-    <div class="header-container">
-        <h2 id="nombreUser">Nombre del Empleado</h2>
-        <h2><?php echo htmlspecialchars($email); ?></h2>
+            <?php if ($rol === 'empleado') { ?>
+                <div class="text-end">
+                    <form method="POST" action="">
+                        <button type="submit" class="btn btn-primary" name="logout">Cerrar sesión</button>
+                    </form>
+                </div>
+            <?php } ?>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="table-container">
+
+            <table class="table table-bordered table-striped" id="dg">
+                <thead class="thead-dark">
+
+                    <tr>
+                        <th scope="col" colspan="5" id="fecha"></th>
+                    </tr>
+                    <tr>
+                        <th scope="col">Jornada</th>
+                        <th scope="col">Hora Ingreso</th>
+                        <th scope="col">Hora Salida</th>
+                        <th scope="col">Registro Ingreso</th>
+                        <th scope="col">Registro Salida</th>
+                    </tr>
+                    <tr id="matutina">
+                        <td>Matutina</td>
+                        <td id="hora_entrada_mnn">Hora Entrada</td>
+                        <td id="hora_salida_mnn">Hora Salida</td>
+                        <td id="registro_entrada_mnn"></td>
+                        <td id="registro_salida_mnn"></td>
+                    </tr>
+                    <tr id="vespertina">
+                        <td>Vespertina</td>
+                        <td id="hora_entrada_tarde">Hora Entrada</td>
+                        <td id="hora_salida_tarde">Hora Salida</td>
+                        <td id="registro_entrada_tarde"></td>
+                        <td id="registro_salida_tarde"></td>
+                    </tr>
+                </thead>
+
+            </table>
+            <div class="mb-3 d-flex justify-content-center">
+                <button class="btn btn-primary" id="btn_submit">Cargando...</button>
+
+            </div>
+
+        </div>
     </div>
 
-    <table>
-        <tr>
-            <td colspan="5" id="fecha"></td>
-        </tr>
-        <tr>
-            <td>Jornada</td>
-            <td>Hora Ingreso</td>
-            <td>Hora Salida</td>
-            <td>Registro Ingreso</td>
-            <td>Registro Salida</td>
-        </tr>
-        <tr id="matutina">
-            <td>Matutina</td>
-            <td id="hora_entrada_mnn">Hora Entrada</td>
-            <td id="hora_salida_mnn">Hora Salida</td>
-            <td id="registro_entrada_mnn"></td>
-            <td id="registro_salida_mnn"></td>
-        </tr>
-        <tr id="vespertina">
-            <td>Vespertina</td>
-            <td id="hora_entrada_tarde">Hora Entrada</td>
-            <td id="hora_salida_tarde">Hora Salida</td>
-            <td id="registro_entrada_tarde"></td>
-            <td id="registro_salida_tarde"></td>
-        </tr>
-    </table>
-    <button id="btn_submit">Cargando...</button>
-    <?php
-    if ($rol === 'empleado') {
-        ?>
-        <div>
-            <form method="POST" action="">
-                <button style="margin-top:10px" type="submit" name="logout">Cerrar sesión</button>
-            </form>
-        </div>
-        <?php
-
-    }
-    ?>
 
     <script>
         const btnSubmit = document.getElementById('btn_submit');
