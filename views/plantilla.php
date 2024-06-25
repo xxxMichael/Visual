@@ -41,6 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
                 <li class="nav-item"><a class="nav-link" href="index.php?action=reporteSemanalG">Reporte Semanal</a></li>
                 <li class="nav-item"><a class="nav-link" href="index.php?action=reporteMensualG">Reporte Mensual</a></li>
                 <li class="nav-item"><a class="nav-link" href="index.php?action=reporteGeneralG">Reporte General</a></li>
+                <li class="nav-item">
+    <a class="nav-link" href="views/interfaces/reporteE.php" target="_blank">Reporte Empleados</a>
+</li>
+
                 <div>
                             <form method="POST" action="">
                                 <button type="submit" name="logout">Cerrar sesión</button>
@@ -76,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
                         <li><a href="index.php?action=reporteSemanalG" class="text-white">Reporte Semanal</a></li>
                         <li><a href="index.php?action=reporteMensualG" class="text-white">Reporte Mensual</a></li>
                         <li><a href="index.php?action=reporteGeneralG" class="text-white">Reporte General</a></li>
+                        <li><a href="index.php?action=reporteE" class="text-white">Reporte Empleados</a></li>
                       
                         <!--<li><a href="index.php?action=GestionInOut" class="text-white">Registro Asistencia</a></li>-->
                     </ul>

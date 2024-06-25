@@ -139,8 +139,6 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
     <script>
         const btnSubmit = document.getElementById('btn_submit');
         const cedula = "<?php echo $email; ?>";
-
-        // Función para actualizar la fecha y hora actual
         function updateDateTime() {
             const now = new Date();
             const options = { weekday: 'long', day: 'numeric', month: 'long' };
@@ -148,21 +146,17 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
             document.getElementById('fecha').innerText = dateTimeString;
         }
 
-        // Función para inicializar la página
         function initializePage() {
             updateDateTime();
-            //   const cedulaEmpleado = '2222222222'; // Aquí debes obtener la cédula del empleado de alguna forma segura
+            //   const cedulaEmpleado = '2222222222';
 
-            // Configuración del cuerpo de la solicitud POST
             const formData = new FormData();
             formData.append('cedula', cedula);
 
-            // Opciones para la solicitud fetch
             const fetchOptions = {
                 method: 'POST',
                 body: formData
             };
-            // Hacer una solicitud fetch para obtener las horas de entrada y salida
             fetch('models/obtener_horas.php', fetchOptions)
                 .then(response => {
                     if (!response.ok) {
@@ -186,13 +180,11 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    // Manejar el error (por ejemplo, mostrar un mensaje al usuario)
                 });
         }
 
 
 
-        // Función para manejar el click en el botón de registro
         function registrarEntrada() {
 
         }
