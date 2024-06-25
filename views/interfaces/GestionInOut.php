@@ -327,7 +327,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                     return;
                 }
 
-            } else if (horaActual.getHours() >= 13 && horaActual.getHours() < 22) { // 21 representa las 9 pm en formato de 24 horas
+            } else if (horaActual.getHours() >= 13 && horaActual.getHours() < 21) { // 21 representa las 9 pm en formato de 24 horas
                 if (entradaTardeValue === 'N/A' && horaActualHHMM < horaSalidaTardeMas10Minutos) {
                     console.log("dentro de reg entrad");
 
@@ -406,7 +406,6 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
         }
 
 
-        // Agregar evento click al botón
         btnSubmit.addEventListener('click', function () {
             const valorBoton = btnSubmit.value;
             const hora = obtenerHoraActual();
@@ -437,6 +436,8 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                                 return enviarmulta(multa, "Atraso", cedula);
 
                             } else {
+                                window.location.reload();
+
                                 return Promise.resolve();
                             }
                         })
@@ -451,7 +452,10 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                                 const multa = calcularMulta(horaSalidaMnnValue, hora);
                                 return enviarmulta(multa, "Salida temprana", cedula);
                             } else {
+                                window.location.reload();
+
                                 return Promise.resolve();
+
                             }
                         })
                         .catch(error => {
@@ -473,8 +477,13 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                                     return enviarmulta(multa, "Atraso", cedula);
 
                                 } else {
+                                    window.location.reload();
+
                                     return Promise.resolve();
+
                                 }
+                                window.location.reload();
+
                             }
                         })
                         .catch(error => {
@@ -485,7 +494,7 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                 case 'SalidaTarde':
                     enviarRegistro('salidaTarde', hora, cedula)
                         .then(() => {
-                            if (salidaMnnValue == "N/A" || entradaMnnValue == "N/A"||entradaTardeValue=="N/A") { //
+                            if (salidaMnnValue == "N/A" || entradaMnnValue == "N/A" || entradaTardeValue == "N/A") { //
                                 const mult = 8 * 8;
                                 enviarmulta((mult), "Inasistencia", cedula);
                             } else {
@@ -494,8 +503,12 @@ if (isset($_SESSION['email']) && isset($_SESSION['rol'])) {
                                     return enviarmulta(multa, "Salida Temprana", cedula);
 
                                 } else {
+
                                     return Promise.resolve();
+
                                 }
+                                window.location.reload();
+
                             }
                         })
                         .catch(error => {
